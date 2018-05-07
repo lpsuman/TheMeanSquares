@@ -123,61 +123,65 @@ def main():
 
             ct = clean_text(text)
             ct_tokens = ct.split()
+
             # provjera da duljina teksta nije > 30 rijeci
-            if len(ct_tokens) <= 30:
-                emo_list = emojilib.emoji_list(text)
-                emo_set = [d['code'] for d in emo_list if 'code' in d]
+            if len(ct_tokens) > 30:
+                ct_tokens = ct_tokens[:30]
+                ct = " ".join(ct_tokens)
 
-                # PROVJERA
-                # - provjera ako su svi emoticoni iz naseg skupa emoticona
-                cond = True
-                for emos in emo_set:
-                    emo = emos.encode('utf_8')
-                    if emo not in mapping:
-                        cond = False
-                        break
-                if not cond:
-                    continue
+            emo_list = emojilib.emoji_list(text)
+            emo_set = [d['code'] for d in emo_list if 'code' in d]
 
-                # PROVJERA
-                # - provjera da u tekstu nema emoticona koji su jedan iza drugoga
-                emo_location = [d['location'] for d in emo_list if 'location' in d]
-                second_loc = -1
-                cond = True
-                for loc in emo_location:
-                    if second_loc == loc[0] or (second_loc+1 == loc[0] and second_loc!=-1):
-                        cond = False
-                        break
-                    second_loc = loc[1]
-                if not cond:
-                    continue
+            # PROVJERA
+            # - provjera ako su svi emoticoni iz naseg skupa emoticona
+            cond = True
+            for emos in emo_set:
+                emo = emos.encode('utf_8')
+                if emo not in mapping:
+                    cond = False
+                    break
+            if not cond:
+                continue
 
-                ok+=1
+            # PROVJERA
+            # - provjera da u tekstu nema emoticona koji su jedan iza drugoga
+            emo_location = [d['location'] for d in emo_list if 'location' in d]
+            second_loc = -1
+            cond = True
+            for loc in emo_location:
+                if second_loc == loc[0] or (second_loc+1 == loc[0] and second_loc!=-1):
+                    cond = False
+                    break
+                second_loc = loc[1]
+            if not cond:
+                continue
 
-                # Upis labela u datoteke
-                pos = 0
-                br_emojies = 0
-                position_izlaz = list("0000000000000000000000000000000")
-                for tok in ct_tokens:
-                    pos +=1
-                    if tok in emo_set:
-                        emo = tok.encode('utf_8')
-                        out_emoji_labels.write(mapping[emo]+" ")
-                        position_izlaz[pos-br_emojies-1]='1'
-                        br_emojies +=1
-                out_loc_labels.write("".join(position_izlaz)+"\n")
-                out_emoji_labels.write("\n")
+            ok+=1
 
-                # Upis cistog teksta u datoteku
-                ct_no_emoji = emojilib.replace_emoji(ct, replacement=' ')
-                ct_no_emoji_new = ' '.join(ct_no_emoji.split())
-                out_text.write(ct_no_emoji_new+"\n")
+            # Upis labela u datoteke
+            pos = 0
+            br_emojies = 0
+            position_izlaz = list("0000000000000000000000000000000")
+            for tok in ct_tokens:
+                pos +=1
+                if tok in emo_set:
+                    emo = tok.encode('utf_8')
+                    out_emoji_labels.write(mapping[emo]+" ")
+                    position_izlaz[pos-br_emojies-1]='1'
+                    br_emojies +=1
+            out_loc_labels.write("".join(position_izlaz)+"\n")
+            out_emoji_labels.write("\n")
 
-                # Upis cijelog teksta sa id-evima
-                full_text.write(text+"\n")
-                out_ids.write(str(tweet_id)+"\n")
+            # Upis cistog teksta u datoteku
+            ct_no_emoji = emojilib.replace_emoji(ct, replacement=' ')
+            ct_no_emoji_new = ' '.join(ct_no_emoji.split())
+            out_text.write(ct_no_emoji_new+"\n")
 
-                if tot % 10000 == 0:
+            # Upis cijelog teksta sa id-evima
+            full_text.write(text+"\n")
+            out_ids.write(str(tweet_id)+"\n")
+
+            if tot % 10000 == 0:
                     print(str(tot))
 
             if isinstance(num_of_tweets, int) and num_of_tweets > 0 and ok >= num_of_tweets:

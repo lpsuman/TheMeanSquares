@@ -118,7 +118,7 @@ def main():
 			# provjera da duljina teksta nije > 30 rijeci
 			if len(ct_tokens)>30:
 				ct_tokens = ct_tokens[:30]
-				text = text[:30]
+				ct = " ".join(ct_tokens)
 			emo_list = emojilib.emoji_list(text)
 			emo_set = [d['code'] for d in emo_list if 'code' in d]
 

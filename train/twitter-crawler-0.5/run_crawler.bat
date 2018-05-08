@@ -1,0 +1,1 @@
+java -classpath '.\twitter-crawler-0.5.jar;.\lib\*' org.backingdata.twitter.crawler.rest.TwitterRESTKeywordSearchCrawler .\crawler.properties

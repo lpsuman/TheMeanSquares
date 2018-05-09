@@ -22,14 +22,16 @@ sys.setdefaultencoding('utf8')
 import json
 import re
 import emojilib #from https://github.com/fvancesco/emoji
+import os
 from nltk.tokenize import TweetTokenizer
 import nltk
 
 tknz = TweetTokenizer()
 
 """ argument
-        == 0 -> brisanje svih interpunkcija
-        == 1 -> odvajanje interpunkcija
+arg[0] - path to tweet txt file
+arg[1] - 0 for interpunction erasing, 1 otherwise
+arg[2] - how many tweets to process
 """
 def clean_text(text, argument=1):
     #remove links, anonymize user mentions
@@ -94,11 +96,17 @@ def obrada_pocetnog_teksta(text_p):
 
 
 def main():
-    out_text = open(tweets_file+".text",'w')
-    full_text = open(tweets_file+".full",'w')
-    out_loc_labels = open(tweets_file+".loclabels",'w')
-    out_emoji_labels = open(tweets_file+".emolabels",'w')
-    out_ids = open(tweets_file+".ids",'w')
+    path_prefix = "./data/"
+    num_suffix = "_" + str(num_of_tweets)
+    tweets_file_name = os.path.splitext(os.path.split(tweets_file)[1])[0]
+    result_path = path_prefix + tweets_file_name + num_suffix
+
+    out_text = open(result_path + ".text", 'w')
+    full_text = open(result_path + ".full", 'w')
+    out_loc_labels = open(result_path + ".loclabels", 'w')
+    out_emoji_labels = open(result_path + ".emolabels", 'w')
+    out_ids = open(result_path + ".ids", 'w')
+
     ok=0
     tot=0
 
@@ -192,8 +200,8 @@ def main():
             full_text.write(text+"\n")
             out_ids.write(str(tweet_id)+"\n")
 
-            if tot % 10000 == 0:
-                print(str(tot))
+            # if isinstance(num_of_tweets, int) and num_of_tweets > 0 and ok >= num_of_tweets:
+            #     break
 
 
 
@@ -208,6 +216,12 @@ def main():
 if __name__ == '__main__':
 
     args = sys.argv[1:]
+
+    if len(args) == 3:
+        num_of_tweets = int(args[2])
+    else:
+        num_of_tweets = "ALL"
+
     if len(args) == 2:
         tweets_file = args[0]
         lang = args[1]

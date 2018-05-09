@@ -122,12 +122,19 @@ def main():
 
 			# PROVJERA
 			# - provjera da duljina teksta nije > 30 rijeci
+			# - ako su unutar teksta emoji, njih ne uzimamo kao rijec
 			if len(ct_tokens)>30:
-				ct_tokens = ct_tokens[:30]
+				ct_tokens_temp = ct_tokens[:31]
+				ct_temp = " ".join(ct_tokens_temp)
+
+				emo_list = emojilib.emoji_list(ct_temp)
+				ct_length = 30 + len(emo_list)
+
+				ct_tokens = ct_tokens[:ct_length]
 				ct = " ".join(ct_tokens)
-				text_t = text.split()
-				text_t = text_t[:30]
-				text = " ".join(text_t)
+				#text_t = text.split()
+				#text_t = text_t[:30]
+				#text = " ".join(text_t)
 
 			# PROVJERA
 			# - provjera ako clean text nema niti jedan emoticon -> onda ga preskociti

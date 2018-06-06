@@ -200,8 +200,11 @@ def main():
             full_text.write(text+"\n")
             out_ids.write(str(tweet_id)+"\n")
 
-            # if isinstance(num_of_tweets, int) and num_of_tweets > 0 and ok >= num_of_tweets:
-            #     break
+            if ok % 10000==0:
+                print(ok)
+
+            if isinstance(num_of_tweets, int) and num_of_tweets > 0 and ok >= num_of_tweets:
+                 break
 
 
 
@@ -222,7 +225,7 @@ if __name__ == '__main__':
     else:
         num_of_tweets = "ALL"
 
-    if len(args) == 2:
+    if len(args) == 2 or len(args) == 3:
         tweets_file = args[0]
         lang = args[1]
 

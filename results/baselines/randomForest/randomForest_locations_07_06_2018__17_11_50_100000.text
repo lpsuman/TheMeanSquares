@@ -1,0 +1,12 @@
+randomForest, locations:
+
+min_samples_leaf: 1
+min_samples_split: 5
+
+Accuracy: 0.9126889754568648
+Precision: 0.10779723201711293
+Recall: 0.29347935971064987
+F1: 0.1576742836378429
+ratio of positive/negative predictions: 0.02784749016826289
+
+tweet_by_ID_02_6_2018__05_40_21_100000.text

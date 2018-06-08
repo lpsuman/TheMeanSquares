@@ -27,6 +27,7 @@ from nltk.tokenize import TweetTokenizer
 import nltk
 
 tknz = TweetTokenizer()
+delete_hashtags=True
 
 """ argument
 arg[0] - path to tweet txt file
@@ -42,6 +43,8 @@ def clean_text(text, argument=1):
     for t in text_new.split(" "):
         if t.startswith('@') and len(t) > 1:
             clean += "@user "
+        elif t.startswith('#') and len(t) > 1 and (delete_hashtags or argument==0):
+            pass
         elif t.startswith('http'):
             pass
         else:
@@ -58,8 +61,19 @@ def clean_text(text, argument=1):
         clean = re.sub(r'([-+\\\\|()[\]{};:,<>/?@#$%^&*_~\'\"!])\1+', r'\1', clean)
 
         # tokeniziranje
-        clean = tknz.tokenize(clean)
-        clean = ' '.join(clean)
+        clean2 = tknz.tokenize(clean)
+
+        # uklanjane hashtagova!
+        if delete_hashtags:
+            clean = ""
+            for c in clean2:
+                if c.startswith('#') and len(c) > 1:
+                    pass
+                else:
+                    clean += c + " "
+            clean = clean.rstrip()
+        else:
+            clean = ' '.join(clean2)
 
         # uklanjanje nepotrebnih interpunkcija koje u tekstu nemaju neku vaznost
         chars = [' # ',' + ',' * ',' _ ']
@@ -126,6 +140,9 @@ def main():
             # obrada pocetnog teksta
             text = obrada_pocetnog_teksta(text_poc)
             ct = clean_text(text)
+
+            ct = ct.decode('utf-8')
+            ct = obrada_pocetnog_teksta(ct)
             ct_tokens = ct.split()
 
             # PROVJERA

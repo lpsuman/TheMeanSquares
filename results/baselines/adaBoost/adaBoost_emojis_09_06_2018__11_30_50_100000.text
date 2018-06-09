@@ -1,0 +1,12 @@
+adaBoost, emojis:
+
+base_estimator__max_depth: 2
+base_estimator__max_features: 2
+n_estimators: 50
+
+Accuracy: 0.9231038138421876
+Precision: 0.07368857088257108
+Recall: 0.01744207729707797
+F1: 0.014447855907878162
+
+tweet_by_ID_02_6_2018__05_40_21_100000.text

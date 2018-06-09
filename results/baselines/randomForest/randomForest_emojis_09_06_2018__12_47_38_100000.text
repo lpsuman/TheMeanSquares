@@ -1,0 +1,11 @@
+randomForest, emojis:
+
+min_samples_leaf: 4
+min_samples_split: 10
+
+Accuracy: 0.9575499411926044
+Precision: 0.01007440745582128
+Recall: 0.06571852177002635
+F1: 0.010225247314098043
+
+tweet_by_ID_02_6_2018__05_40_21_100000.text

@@ -1,0 +1,13 @@
+adaBoost, locations:
+
+base_estimator__max_depth: 3
+base_estimator__max_features: 3
+n_estimators: 50
+
+Accuracy: 0.6030689131427766
+Precision: 0.772644762656624
+Recall: 0.13364514785033105
+F1: 0.22787415049033033
+ratio of positive/negative predictions: 0.43826931718168016
+
+tweet_by_ID_02_6_2018__05_40_21_100000.text

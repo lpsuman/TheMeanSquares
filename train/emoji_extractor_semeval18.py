@@ -16,15 +16,11 @@ $ python emoji_extractor_semeval18.py tweets_us.json us
 
 import sys
 import string
-import unicodedata
-reload(sys)
-sys.setdefaultencoding('utf8')
 import json
 import re
 import emojilib #from https://github.com/fvancesco/emoji
 import os
 from nltk.tokenize import TweetTokenizer
-import nltk
 
 tknz = TweetTokenizer()
 delete_hashtags=True
@@ -88,11 +84,13 @@ def clean_text(text, argument=1):
 
 def obrada_pocetnog_teksta(text_p):
     # uklanjanje svih unicode znakova koji nisu brojke, slova, interpunkcije i nasih 20 emojia
-    text = re.sub(ur'[^\u0020-\u007E|\u2764|\U0001f60d|\U0001f602|\U0001f495|\U0001f525|\U0001f60a|\U0001f60e|\u2728|\U0001f499|\U0001f618|\U0001f4f7|\u2600|\U0001f49c|\U0001f609|\U0001f4af|\U0001f601|\U0001f384|\U0001f4f80|\U0001f61c|\U0001f1fa\U0001f1f8]'," ",text_p, re.U)
+    text = re.sub(
+        '[^\u0020-\u007E|\u2764|\U0001f60d|\U0001f602|\U0001f495|\U0001f525|\U0001f60a|\U0001f60e|\u2728|\U0001f499|\U0001f618|\U0001f4f7|\u2600|\U0001f49c|\U0001f609|\U0001f4af|\U0001f601|\U0001f384|\U0001f4f80|\U0001f61c|\U0001f1fa\U0001f1f8]', " ", text_p, re.U)
 
     # uklanjanje repetitivnih emojia + dodatno uklanjanje emojia "🇺🇸"
-    text = re.sub(ur"([\u2764|\U0001f60d|\U0001f602|\U0001f495|\U0001f525|\U0001f60a|\U0001f60e|\u2728|\U0001f499|\U0001f618|\U0001f4f7|\u2600|\U0001f49c|\U0001f609|\U0001f4af|\U0001f601|\U0001f384|\U0001f4f80|\U0001f61c])\1+", r'\1', text, flags=re.UNICODE)
-    text = re.sub(ur"(\U0001f1fa\U0001f1f8)\1+", r'\1', text, flags=re.UNICODE)
+    text = re.sub(
+        "([\u2764|\U0001f60d|\U0001f602|\U0001f495|\U0001f525|\U0001f60a|\U0001f60e|\u2728|\U0001f499|\U0001f618|\U0001f4f7|\u2600|\U0001f49c|\U0001f609|\U0001f4af|\U0001f601|\U0001f384|\U0001f4f80|\U0001f61c])\1+", r'\1', text, flags=re.UNICODE)
+    text = re.sub("(\U0001f1fa\U0001f1f8)\1+", r'\1', text, flags=re.UNICODE)
 
     # stavljanje razmaka između emojia
     text_de = emojilib.demojize(text.decode('utf8'), delimiters = (" ~~", "~~ "))
@@ -103,8 +101,9 @@ def obrada_pocetnog_teksta(text_p):
     text += " " # dodavanje razmak na kraju texta da regex moze biti primjenjen i na kraju
 
     # uklanjanje repetitivnih emojia koji su odvojeni razmakom, npr. "❤ ❤ ❤" u "❤"
-    text = re.sub(ur"([\u2764|\U0001f60d|\U0001f602|\U0001f495|\U0001f525|\U0001f60a|\U0001f60e|\u2728|\U0001f499|\U0001f618|\U0001f4f7|\u2600|\U0001f49c|\U0001f609|\U0001f4af|\U0001f601|\U0001f384|\U0001f4f80|\U0001f61c]\s)\1+", r'\1', text, flags=re.UNICODE)
-    text = re.sub(ur"(\U0001f1fa\U0001f1f8\s)\1+", r'\1', text, flags=re.UNICODE)
+    text = re.sub(
+        "([\u2764|\U0001f60d|\U0001f602|\U0001f495|\U0001f525|\U0001f60a|\U0001f60e|\u2728|\U0001f499|\U0001f618|\U0001f4f7|\u2600|\U0001f49c|\U0001f609|\U0001f4af|\U0001f601|\U0001f384|\U0001f4f80|\U0001f61c]\s)\1+", r'\1', text, flags=re.UNICODE)
+    text = re.sub("(\U0001f1fa\U0001f1f8\s)\1+", r'\1', text, flags=re.UNICODE)
     text = text.rstrip()
     return text
 
@@ -234,6 +233,8 @@ def main():
 
 
 if __name__ == '__main__':
+
+    pass
 
     args = sys.argv[1:]
 
